@@ -8,14 +8,13 @@ def count(A):
         N - количество всех цифр
     """
     f = [0]*10
-    N = 20
-    for i in range(N):
+    
+    for i in range(len(A)):
         x = A[i]
         f[x]+= 1
     
     return f
     
-
 
 
 def test1 (count_def):
