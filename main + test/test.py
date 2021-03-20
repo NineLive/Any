@@ -15,33 +15,46 @@ def to_russian_string(value: int):
     :param value: Takes an integer from 0 to 999
     :return: Returns the word string obtained from the value in Russian lowercase letters
     """
+    if not (isinstance(value, int) and (0 <= value <= 999)):
+        raise ValueError('Value must be int in range from 0 to 999')
     value = str(value)
-    result = ''
     if len(value) == 3:
-        if int(value) % 10 == 0:  # 110,220,330...
-            if int(value) % 100 == 0:  # 100,200,300...
-                result = f'{hundreds[value[0]]}'
-            else:
-                result = f'{hundreds[value[0]]} {tens[value[1]]}'
-
-        elif 10 < int(value[1:]) < 20:  # 111,212,311..
-            result = f'{hundreds[value[0]]} {units2[value[2]]}'
-        elif value[1] == '0':  # 105, 209, 304...
-            result = f'{hundreds[value[0]]} {units[value[2]]}'
-        else:  # 145,227,546.. any
-            result = f'{hundreds[value[0]]} {tens[value[1]]} {units[value[2]]}'
-
+        result = get_len3(value)
     elif len(value) == 2:
-        if value[1] == '0':  # 20, 30, 40...
-            result = f'{tens[value[0]]}'
-        elif int(value) < 20:  # 11, 12, 13...
-            result = f'{units2[value[1]]}'
-        else:  # 27, 34, 45... any
-            result = f'{tens[value[0]]} {units[value[1]]}'
-
-    elif len(value) == 1:  # 1, 2, 3...
-        result = f'{units[value[0]]}'
+        result = get_len2(value)
+    else:
+        result = get_len1(value)
     return result
+
+
+def get_len3(value):
+    if int(value) % 10 == 0:  # 110,220,330...
+        if int(value) % 100 == 0:  # 100,200,300...
+            result = f'{hundreds[value[0]]}'
+        else:
+            result = f'{hundreds[value[0]]} {tens[value[1]]}'
+
+    elif 10 < int(value[1:]) < 20:  # 111,212,311..
+        result = f'{hundreds[value[0]]} {units2[value[2]]}'
+    elif value[1] == '0':  # 105, 209, 304...
+        result = f'{hundreds[value[0]]} {units[value[2]]}'
+    else:  # 145,227,546.. any
+        result = f'{hundreds[value[0]]} {tens[value[1]]} {units[value[2]]}'
+    return result
+
+
+def get_len2(value):
+    if value[1] == '0':  # 20, 30, 40...
+        result = f'{tens[value[0]]}'
+    elif int(value) < 20:  # 11, 12, 13...
+        result = f'{units2[value[1]]}'
+    else:  # 27, 34, 45... any
+        result = f'{tens[value[0]]} {units[value[1]]}'
+    return result
+
+
+def get_len1(value):
+    return f'{units[value[0]]}'
 
 
 units = {
@@ -89,17 +102,14 @@ hundreds = {
     '8': 'восемьсот',
     '9': 'девятьсот'}
 
-
-def test1(to_russian_string_def):
-    print("Test #1: ")
-    number = [0, 1, 10, 11, 21, 100, 101, 110, 111, 199]
-    f_test = ['ноль', 'один', 'десять', 'одиннадцать', 'двадцать один',
-              'сто', 'сто один', 'сто десять', 'сто одиннадцать', 'сто девяносто девять']
-    f = []
-    for num in number:
-        f.append(to_russian_string_def(num))
-    print("ok" if f == f_test else "Fail")
-
-
 if __name__ == "__main__":
-    test1(to_russian_string)
+    assert to_russian_string(0) == 'ноль'
+    assert to_russian_string(1) == 'один'
+    assert to_russian_string(10) == 'десять'
+    assert to_russian_string(11) == 'одиннадцать'
+    assert to_russian_string(21) == 'двадцать один'
+    assert to_russian_string(100) == 'сто'
+    assert to_russian_string(101) == 'сто один'
+    assert to_russian_string(110) == 'сто десять'
+    assert to_russian_string(111) == 'сто одиннадцать'
+    assert to_russian_string(199) == 'сто девяносто девять'
