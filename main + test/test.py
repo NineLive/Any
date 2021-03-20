@@ -10,7 +10,7 @@
 """
 
 
-def to_russian_string(value: int):
+def to_russian_string(value: int) -> str:
     """
     :param value: Takes an integer from 0 to 999
     :return: Returns the word string obtained from the value in Russian lowercase letters
